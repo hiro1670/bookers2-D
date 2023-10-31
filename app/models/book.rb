@@ -5,10 +5,14 @@ class Book < ApplicationRecord
   
   validates :title,presence:true
   validates :body,presence:true,length:{maximum:200}
+  validates :tag, presence: true
   
   def favorited_by?(user)
     favorites.where(user_id: user.id).exists?
   end
+  
+  scope :latest, -> {order(created_at: :desc)}
+  scope :star_count, -> {order(star: :desc)}
 	
   def self.search_for(content, method)
     if method == 'perfect'
